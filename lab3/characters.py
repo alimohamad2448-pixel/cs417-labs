@@ -91,4 +91,10 @@ class Paladin(Character):
         
         return f"{self.name} channels {self.special_power}! Allies defense boosted!"
     
-    
+
+Dagger = Weapon("Dagger", 5)
+
+
+
+
+        
