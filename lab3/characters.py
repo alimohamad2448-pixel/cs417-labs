@@ -94,6 +94,18 @@ class Paladin(Character):
 
 Dagger = Weapon("Dagger", 5)
 
+Army = [
+        Warrior("Revel"),
+        Mage("Diamond"),
+        Paladin("Horus")
+]
+
+for character in Army:
+    character.equip_weapon(Dagger)
+
+    print(character)
+    print(character.get_status())
+    print(character.summon_power())
 
 
 
