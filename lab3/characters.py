@@ -7,9 +7,9 @@ class Weapon:
         self.damage = damage
 
 
-def attack_description(self):
+    def attack_description(self):
 
-    return f"attacks with {self.name} for {self.damage} damage"
+        return f"attacks with {self.name} for {self.damage} damage"
 
 
 
@@ -24,35 +24,35 @@ class Character:
         self.weapon = None
 
 
-def __str__(self):
+    def __str__(self):
 
-    return f"I am {self.name}, a {self.__class__.__name__}"
-
-
-def equip_weapon(self, weapon):
-
-    self.weapon = weapon
+        return f"I am {self.name}, a {self.__class__.__name__}"
 
 
-def attack(self):
+    def equip_weapon(self, weapon):
 
-    if self.weapon:
-
-        return f"{self.name} {self.weapon.attack_description()}!"
-
-    return f"{self.name} attacks with bare hands for 5 damage!"
+        self.weapon = weapon
 
 
-def get_status(self):
+    def attack(self):
 
-    weapon_info = self.weapon.name if self.weapon else "unarmed"
+        if self.weapon:
 
-    return f"{self.name} the {self.__class__.__name__} - Weapon: {weapon_info}"
+            return f"{self.name} {self.weapon.attack_description()}!"
+
+        return f"{self.name} attacks with bare hands for 5 damage!"
 
 
-def summon_power(self):
+    def get_status(self):
 
-    raise NotImplementedError("Subclasses must implement summon_power()")
+        weapon_info = self.weapon.name if self.weapon else "unarmed"
+
+        return f"{self.name} the {self.__class__.__name__} - Weapon: {weapon_info}"
+
+
+    def summon_power(self):
+
+        raise NotImplementedError("Subclasses must implement summon_power()")
 
 
 
@@ -63,9 +63,9 @@ class Warrior(Character):
         super().__init__(name, "Berserker Rage")
 
 
-def summon_power(self):
+    def summon_power(self):
 
-    return f"{self.name} unleashes {self.special_power}! Attack power doubled!"
+        return f"{self.name} unleashes {self.special_power}! Attack power doubled!"
 
 
 
@@ -76,6 +76,19 @@ class Mage(Character):
         super().__init__(name, "Arcane Blast")
 
 
-def summon_power(self):
+    def summon_power(self):
 
-    return f"{self.name} channels {self.special_power}! Enemies are stunned!"
+        return f"{self.name} channels {self.special_power}! Enemies are stunned!"
+
+
+class Paladin(Character):
+
+    def __init__(self,name):
+
+        super().__init__(name, "Holy Shield")
+
+    def summon_power(self):
+        
+        return f"{self.name} channels {self.special_power}! Allies defense boosted!"
+    
+    
