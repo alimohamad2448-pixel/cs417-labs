@@ -93,6 +93,7 @@ class Paladin(Character):
     
 
 Dagger = Weapon("Dagger", 5)
+Rock = Weapon("Rock", 1)
 
 Army = [
         Warrior("Revel"),
@@ -106,6 +107,14 @@ for character in Army:
     print(character)
     print(character.get_status())
     print(character.summon_power())
+
+
+Army[0].equip_weapon(Rock)
+print(Army[0].attack())
+Army[0].equip_weapon(Dagger)
+print(Army[0].attack())
+
+
 
 
 
