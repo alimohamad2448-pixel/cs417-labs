@@ -115,6 +115,10 @@ Army[0].equip_weapon(Dagger)
 print(Army[0].attack())
 
 
+# The reason our class and subclass mdoels are structured with composition rather than inheritence is to allow flexibility
+# and convenience, we can make small changes to characters or their properties without having to create a whole new class
+# we can just make minor tweaks via our composition like system
+
 
 
 
