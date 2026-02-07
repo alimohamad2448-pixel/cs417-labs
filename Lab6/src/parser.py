@@ -14,3 +14,6 @@ def parse_availability(response):
 
     else:
         return False
+
+
+           
