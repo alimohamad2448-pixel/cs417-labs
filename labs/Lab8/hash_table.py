@@ -115,7 +115,16 @@ class HashTable:
         Raises:
             KeyError: If the key is not found.
         """
-        pass  # TODO: implement this
+        index = self._hash(key)
+        bucket = self.table[index]
+
+        for i, pair in enumerate(bucket):
+            if pair[0] == key:
+                bucket.pop(i)     
+                self.count -= 1
+                return
+
+        raise KeyError(key)
 
     # ── Provided Methods (do not modify) ──────────────────────────
 
