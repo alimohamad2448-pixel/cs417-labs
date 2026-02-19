@@ -25,7 +25,7 @@ class HashTable:
 
     def _hash(self, key):
 
-        return hash(key) % self.size
+        return hash(key) % len(self.table)
 
         """
         Return a bucket index for the given key.
@@ -57,7 +57,16 @@ class HashTable:
             key:   The key to insert.
             value: The value to associate with the key.
         """
-        pass  # TODO: implement this
+        index = self._hash(key)          
+        bucket = self.table[index]       
+
+        for pair in bucket:
+            if pair[0] == key:
+                pair[1] = value
+                return
+
+        bucket.append([key, value])      
+        self.count += 1
 
     # ── TODO 3: Get ───────────────────────────────────────────────
 
@@ -79,7 +88,14 @@ class HashTable:
         Raises:
             KeyError: If the key is not found.
         """
-        pass  # TODO: implement this
+        index = self._hash(key)   # or self.__hash(key if your file uses that)
+        bucket = self.table[index]
+
+        for pair in bucket:
+            if pair[0] == key:
+                return pair[1]
+
+        raise KeyError(key)
 
     # ── TODO 4: Delete ────────────────────────────────────────────
 
