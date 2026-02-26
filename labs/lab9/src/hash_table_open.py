@@ -51,6 +51,26 @@ class HashTableOpen:
     # ── TODO 2: Put ───────────────────────────────────────────────
 
     def put(self, key, value):
+        start = self._hash(key)
+
+        for step in range(self.size):
+            
+            index = (start + step) % self.size
+            slot = self.table[index]
+
+            if slot is None or slot is _TOMBSTONE:
+                self.table[index] = (key, value)
+                self.count += 1
+                return
+            
+            if slot[0] == key:
+                self.table[index] = (key, value)
+                return
+
+
+        raise Exception("Hash table is full")
+
+
         """
         Insert or update a key-value pair using linear probing.
 
