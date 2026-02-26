@@ -142,6 +142,26 @@ class HashTableOpen:
     # ── TODO 4: Delete ────────────────────────────────────────────
 
     def delete(self, key):
+
+        start = self._hash(key)
+
+        for step in range(self.size):
+            index = (start + step) % self.size
+            slot = self.table[index]
+
+            if slot is None:
+                raise KeyError(key)
+
+            if slot is _TOMBSTONE:
+                continue
+
+            if slot[0] == key:
+                self.table[index] = _TOMBSTONE
+                self.count -= 1
+                return
+
+            raise KeyError(key)
+
         """
         Remove a key-value pair by replacing it with a tombstone.
 
