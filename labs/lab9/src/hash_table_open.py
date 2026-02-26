@@ -95,6 +95,25 @@ class HashTableOpen:
     # ── TODO 3: Get ───────────────────────────────────────────────
 
     def get(self, key):
+
+        start = self._hash(key)
+
+        for step in range(self.size):
+            idx = (start + step) % self.size
+            slot = self.table[idx]
+
+            if slot is None:
+                raise KeyError(key)
+
+            if slot is _TOMBSTONE:
+                continue
+
+            if slot[0] == key:
+                return slot[1]
+
+        raise KeyError(key)
+
+
         """
         Look up a value by key, following the probe chain.
 
