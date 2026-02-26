@@ -31,6 +31,9 @@ class HashTableOpen:
     # ── TODO 1: Hash Function ─────────────────────────────────────
 
     def _hash(self, key):
+
+        return hash(key) % self.size
+
         """
         Return a slot index for the given key.
 
@@ -43,7 +46,7 @@ class HashTableOpen:
         Returns:
             int: A slot index between 0 and self.size - 1.
         """
-        pass  # TODO: implement this (1 line)
+        # TODO: implement this (1 line)
 
     # ── TODO 2: Put ───────────────────────────────────────────────
 
