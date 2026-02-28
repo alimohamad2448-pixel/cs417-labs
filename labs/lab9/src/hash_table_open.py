@@ -52,21 +52,35 @@ class HashTableOpen:
 
     def put(self, key, value):
         start = self._hash(key)
+        first_tombstone = None
 
         for step in range(self.size):
-            
             index = (start + step) % self.size
             slot = self.table[index]
 
-            if slot is None or slot is _TOMBSTONE:
-                self.table[index] = (key, value)
+        
+            if slot is None:
+                target = first_tombstone if first_tombstone is not None else index
+                self.table[target] = (key, value)
                 self.count += 1
                 return
-            
+
+        
+            if slot is _TOMBSTONE:
+                if first_tombstone is None:
+                    first_tombstone = index
+                continue
+
+        
             if slot[0] == key:
                 self.table[index] = (key, value)
                 return
 
+    
+        if first_tombstone is not None:
+            self.table[first_tombstone] = (key, value)
+            self.count += 1
+            return
 
         raise Exception("Hash table is full")
 
@@ -160,7 +174,7 @@ class HashTableOpen:
                 self.count -= 1
                 return
 
-            raise KeyError(key)
+        raise KeyError(key)
 
         """
         Remove a key-value pair by replacing it with a tombstone.

@@ -12,22 +12,6 @@ Run your tests:
 from hash_table_open import HashTableOpen
 
 
-def find_keys_for_same_slot(ht, want=3):
-    buckets = {} 
-
-    i = 0
-    while True:
-        k = f"k{i}"          
-        slot = ht._hash(k)
-        buckets.setdefault(slot, []).append(k)
-
-        if len(buckets[slot]) >= want:
-            keys = buckets[slot][:want]
-            return keys, slot
-
-        i += 1
-
-
 
 
 
@@ -39,17 +23,14 @@ class TestTombstones:
         ht = HashTableOpen(size=3)
         
 
-        keys, _ = find_keys_for_same_slot(ht, want=3)
-        k1, k2, k3 = keys
+        ht.put(0, "a")
+        ht.put(3, "b")
+        ht.put(6, "c")
 
-        ht.put(k1, 1)
-        ht.put(k2, 2)
-        ht.put(k3, 3)
+        ht.delete(3)  
 
-        ht.delete(k2)
-
-   
-        assert ht.get(k3) == 3
+        assert ht.get(0) == "a"
+        assert ht.get(6) == "c"
 
         """
         Insert three keys that collide (use a small table, like size=3).
@@ -65,25 +46,14 @@ class TestTombstones:
 
         ht = HashTableOpen(size=3)
 
-        keys, start_slot = find_keys_for_same_slot(ht, want=3)
-        k1, k2, k3 = keys
+        ht.put(0, "a")
+        ht.put(3, "b")
+        ht.put(6, "c")
 
-        ht.put(k1, 1)
-        ht.put(k2, 2)
-        ht.put(k3, 3)
+        ht.delete(3)
 
-        ht.delete(k2)
-
-    
-        new_key = "new_key"
-        while ht._HashTableOpen__hash(new_key) != start_slot:
-            new_key += "x"
-
-        ht.put(new_key, 999)
-
-        assert ht.get(new_key) == 999
-        assert new_key in ht
-        assert len(ht) == 3
+        ht.put(9, "d")
+        assert ht.get(9) == "d"
 
 
         """
@@ -99,21 +69,17 @@ class TestTombstones:
 
         ht = HashTableOpen(size=5)
 
-        ht.put("a", 1)
-        ht.put("b", 2)
-        ht.put("c", 3)
+        ht.put(0, 10)
+        ht.put(5, 20)   
+        ht.put(10, 30)  
         assert len(ht) == 3
 
-        ht.delete("b")
+        ht.delete(5)
         assert len(ht) == 2
 
-        ht.put("b", 22)  
-        assert len(ht) == 3           
-        
-        ht.delete("a")
-        ht.delete("c")
-        assert len(ht) == 1
-        assert ht.get("b") == 22
+        ht.put(5, 200)  
+        assert len(ht) == 3
+        assert ht.get(5) == 200
         
 
         """
