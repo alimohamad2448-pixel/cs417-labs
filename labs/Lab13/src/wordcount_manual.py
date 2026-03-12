@@ -3,6 +3,12 @@ import sys
 
 
 def parse_args_manual(argv):
+    if len(argv) < 2:
+        print("Usage: wordcount_manual.py <filename>", file=sys.stderr)
+        sys.exit(1)
+
+    return argv[1]
+
     """Extract filename from argv list.
 
     If no filename provided, print usage to stderr and exit with code 1.
@@ -20,6 +26,11 @@ def parse_args_manual(argv):
 
 
 def count_words(filepath):
+    with open(filepath, "r") as infile:
+        text = infile.read()
+
+    words = text.split()
+    return len(words)
     """Read a file and return the number of words.
 
     Words are defined by splitting on whitespace.
@@ -40,6 +51,16 @@ def count_words(filepath):
 
 
 def main():
+    filename = parse_args_manual(sys.argv)
+
+    try:
+        count = count_words(filename)
+    except FileNotFoundError:
+        print(f"Error: file '{filename}' not found", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"{filename}: {count} words")
+
     """Wire it together: parse args, count words, print result."""
     # TODO: Call parse_args_manual with sys.argv
     # Call count_words with the filename
