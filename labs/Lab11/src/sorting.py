@@ -25,7 +25,7 @@ def bubble_sort(a_list):
                 a_list[j], a_list[j + 1] = a_list[j + 1], a_list[j]
 
     return a_list
-    
+
     """
     Sort a_list in ascending order using bubble sort.
 
@@ -51,7 +51,23 @@ def bubble_sort(a_list):
 # ── TODO 2: Short Bubble Sort ───────────────────────────────────
 
 
+
 def short_bubble_sort(a_list):
+    n = len(a_list)
+
+    for i in range(n - 1):
+        swapped = False
+
+        for j in range(n - 1 - i):
+            if a_list[j] > a_list[j + 1]:
+                a_list[j], a_list[j + 1] = a_list[j + 1], a_list[j]
+                swapped = True
+
+        if not swapped:
+            return a_list
+
+    return a_list
+
     """
     Sort a_list using bubble sort with early termination.
 
@@ -75,6 +91,18 @@ def short_bubble_sort(a_list):
 
 
 def insertion_sort(a_list):
+    for i in range(1, len(a_list)):
+        current_value = a_list[i]
+        position = i - 1
+
+        while position >= 0 and a_list[position] > current_value:
+            a_list[position + 1] = a_list[position]
+            position -= 1
+
+        a_list[position + 1] = current_value
+
+    return a_list
+    
     """
     Sort a_list in ascending order using insertion sort.
 
