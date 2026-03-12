@@ -102,7 +102,7 @@ def insertion_sort(a_list):
         a_list[position + 1] = current_value
 
     return a_list
-    
+
     """
     Sort a_list in ascending order using insertion sort.
 
@@ -136,6 +136,19 @@ def insertion_sort(a_list):
 
 
 def bubble_sort_counted(a_list):
+    comparisons = 0
+    data_moves = 0
+    n = len(a_list)
+
+    for i in range(n - 1):
+        for j in range(n - 1 - i):
+            comparisons += 1
+            if a_list[j] > a_list[j + 1]:
+                a_list[j], a_list[j + 1] = a_list[j + 1], a_list[j]
+                data_moves += 1
+
+    return (a_list, comparisons, data_moves)    
+    
     """
     Sort a_list using bubble sort, counting comparisons and exchanges.
 
@@ -160,6 +173,27 @@ def bubble_sort_counted(a_list):
 
 
 def insertion_sort_counted(a_list):
+    comparisons = 0
+    data_moves = 0
+
+    for i in range(1, len(a_list)):
+        current_value = a_list[i]
+        position = i - 1
+
+        while position >= 0:
+            comparisons += 1
+
+            if a_list[position] > current_value:
+                a_list[position + 1] = a_list[position]
+                data_moves += 1
+                position -= 1
+            else:
+                break
+
+        a_list[position + 1] = current_value
+        data_moves += 1
+
+    return (a_list, comparisons, data_moves)
     """
     Sort a_list using insertion sort, counting comparisons and data moves.
 
