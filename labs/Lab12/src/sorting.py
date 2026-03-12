@@ -25,6 +25,16 @@ Run tests:
 
 
 def _gap_insertion_sort(a_list, start, gap):
+    for i in range(start + gap, len(a_list), gap):
+        current_value = a_list[i]
+        position = i
+
+        while position >= gap and a_list[position - gap] > current_value:
+            a_list[position] = a_list[position - gap]
+            position = position - gap
+
+        a_list[position] = current_value
+        
     """
     Perform insertion sort on a sublist defined by a starting
     position and gap.
