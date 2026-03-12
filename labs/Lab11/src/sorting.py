@@ -17,6 +17,15 @@ Run tests:
 
 
 def bubble_sort(a_list):
+    n = len(a_list)
+
+    for i in range(n - 1):
+        for j in range(n - 1 - i):
+            if a_list[j] > a_list[j + 1]:
+                a_list[j], a_list[j + 1] = a_list[j + 1], a_list[j]
+
+    return a_list
+    
     """
     Sort a_list in ascending order using bubble sort.
 
