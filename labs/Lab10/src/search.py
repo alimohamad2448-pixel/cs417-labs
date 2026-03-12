@@ -82,6 +82,15 @@ def binary_search(a_list, target):
 
 
 def sequential_search_counted(a_list, target):
+    comparisons = 0
+
+    for item in a_list:
+        comparisons += 1
+        if item == target:
+            return (True, comparisons)
+
+    return (False, comparisons)
+
     """
     Same as sequential_search, but also counts comparisons.
 
@@ -105,6 +114,22 @@ def sequential_search_counted(a_list, target):
 
 
 def binary_search_counted(a_list, target):
+    first = 0
+    last = len(a_list) - 1
+    comparisons = 0
+
+    while first <= last:
+        mid = (first + last) // 2
+        comparisons += 1
+
+        if a_list[mid] == target:
+            return (True, comparisons)
+        elif target < a_list[mid]:
+            last = mid - 1
+        else:
+            first = mid + 1
+
+    return (False, comparisons)
     """
     Same as binary_search, but also counts comparisons.
 
