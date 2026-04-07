@@ -97,8 +97,8 @@ def write_json(filepath: str, data) -> None:
     Example:
         >>> write_json("output.json", [{"name": "José", "grade": 91}])
     """
-    # TODO: Implement this function
-    pass
+    with open(filepath, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
 
 
 def csv_to_json(
