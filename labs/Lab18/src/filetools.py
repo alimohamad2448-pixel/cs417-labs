@@ -76,8 +76,10 @@ def write_csv(filepath: str, data: list[dict], fieldnames: list[str]) -> None:
     Example:
         >>> write_csv("output.csv", [{"name": "Alice", "grade": 92}], ["name", "grade"])
     """
-    # TODO: Implement this function
-    pass
+    with open(filepath, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(data)
 
 
 def write_json(filepath: str, data) -> None:
