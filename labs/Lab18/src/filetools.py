@@ -55,7 +55,8 @@ def read_json(filepath: str):
         >>> data[0]["grade"]
         92
     """
-    pass
+    with open(filepath, encoding='utf-8') as f:
+        return json.load(f)
     
 
 def write_csv(filepath: str, data: list[dict], fieldnames: list[str]) -> None:
