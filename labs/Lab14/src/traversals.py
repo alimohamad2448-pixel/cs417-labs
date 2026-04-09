@@ -41,7 +41,15 @@ def explore():
     - Print the total number of nodes using the size() method
       e.g., "Tree has 9 nodes"
     """
-    pass  # TODO: implement this
+    tree = build_sample_tree()
+
+    tree.display()
+
+    for value in [12, 20, 25]:
+        found = tree.search(value)
+        print(f"{value}: {'found' if found else 'not found'}")
+
+    print("Total nodes:", tree.size())
 
 
 # ── Task 2: Inorder Traversal (Left → Self → Right) ─────────────────
