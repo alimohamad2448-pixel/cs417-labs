@@ -115,7 +115,23 @@ def levelorder(node):
 
     TODO: implement this
     """
-    pass  # TODO: implement this
+
+    if node is None:
+        return []
+
+    result = []
+    queue = [node]   # use list as queue
+
+    while queue:
+        current = queue.pop(0)   # remove from front
+        result.append(current.value)
+
+        if current.left:
+            queue.append(current.left)
+        if current.right:
+            queue.append(current.right)
+
+    return result
 
 
 # ── Main ─────────────────────────────────────────────────────────────
