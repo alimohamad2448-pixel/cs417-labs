@@ -16,8 +16,8 @@ class TaskScheduler:
 
     def __init__(self):
         """Initialize the scheduler."""
-        # TODO: Set up your internal data structures
-        pass
+        self.heap = []
+        self.count = 0
 
     def add_task(self, priority, description):
         """Add a task to the scheduler.
@@ -26,8 +26,8 @@ class TaskScheduler:
             priority: An integer priority (lower = more urgent).
             description: A string describing the task.
         """
-        # TODO: Push onto the heap with a tiebreaker
-        pass
+        heapq.heappush(self.heap, (priority, self.count, description))
+        self.count = self.count + 1
 
     def next_task(self):
         """Remove and return the highest-priority task's description.
@@ -35,8 +35,12 @@ class TaskScheduler:
         Returns:
             The description string, or None if empty.
         """
-        # TODO: Pop from the heap, return the description
-        pass
+        if len(self.heap) == 0:
+            return None
+
+        item = heapq.heappop(self.heap)
+        description = item[2]
+        return description
 
     def peek(self):
         """Return the highest-priority task's description without removing it.
@@ -44,15 +48,17 @@ class TaskScheduler:
         Returns:
             The description string, or None if empty.
         """
-        # TODO: Look at h[0] without popping
-        pass
+        if len(self.heap) == 0:
+            return None
+
+        item = self.heap[0]
+        description = item[2]
+        return description
 
     def __len__(self):
         """Return the number of pending tasks."""
-        # TODO: Return the length of the heap
-        pass
+        return len(self.heap)
 
     def is_empty(self):
         """Return True if there are no pending tasks."""
-        # TODO
-        pass
+        return len(self.heap) == 0
