@@ -98,17 +98,19 @@ def bfs(graph, start):
     order = []
     frontier = deque()
 
-    # TODO: Add `start` to the frontier and mark it as visited
+    frontier.append(start)
+    visited.add(start)
 
     while frontier:
-        # TODO: Dequeue the next node from the front of the queue
+        current = frontier.popleft()
 
-        # TODO: Add the current node to the traversal order
+        order.append(current)
 
         for neighbor in graph.get_neighbors(current):
-            pass
-            # TODO: If this neighbor hasn't been visited,
-            #        mark it as visited and add it to the frontier
+            if neighbor not in visited:
+                visited.add(neighbor)
+                frontier.append(neighbor)
+
 
     return order
 
