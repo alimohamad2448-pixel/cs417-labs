@@ -53,9 +53,13 @@ class DAGNode:
         Raises:
             CycleError: If adding this dependency would create a cycle.
         """
-        # TODO: Reject self-loops (Task 2)
+        if node is self:
+            raise CycleError
+
         # TODO: Reject cycles using has_ancestor (Task 4)
-        # TODO: Add the dependency
+
+        self.dependencies.add(node)
+        
         pass
 
     def has_ancestor(self, target: "DAGNode") -> bool:
