@@ -59,7 +59,7 @@ class DAGNode:
         # TODO: Reject cycles using has_ancestor (Task 4)
 
         self.dependencies.add(node)
-        
+
         pass
 
     def has_ancestor(self, target: "DAGNode") -> bool:
@@ -83,8 +83,27 @@ class DAGNode:
         Returns:
             True if target is reachable via dependencies, False otherwise.
         """
-        # TODO: Walk the dependency chain looking for target
-        pass
+        stack = []
+        visited = set()
+
+        for dependency in self.dependencies:
+            stack.append(dependency)
+
+        while len(stack) > 0:
+            current = stack.pop()
+
+            if current is target:
+                return True
+
+            if current in visited:
+                continue
+
+            visited.add(current)
+
+            for dependency in current.dependencies:
+                stack.append(dependency)
+
+        return False
 
     def __repr__(self):
         dep_names = sorted(d.name for d in self.dependencies) if hasattr(self, 'dependencies') else []
