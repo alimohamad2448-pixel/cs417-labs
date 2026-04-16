@@ -19,8 +19,16 @@ def push_and_pop(values):
     Returns:
         A list of the same numbers in ascending order.
     """
-    # TODO: Create a heap, push each value, pop them all off
-    pass
+    heap = []
+    result = []
+
+    for value in values:
+        heapq.heappush(heap, value)
+
+    while heap:
+        result.append(heapq.heappop(heap))
+
+    return result
 
 
 def heapify_and_peek(values):
@@ -32,8 +40,8 @@ def heapify_and_peek(values):
     Returns:
         The smallest value (without removing it from the heap).
     """
-    # TODO: Use heapq.heapify(), then peek with h[0]
-    pass
+    heapq.heapify(values)
+    return values[0]
 
 
 def top_k_smallest(values, k):
@@ -46,9 +54,8 @@ def top_k_smallest(values, k):
     Returns:
         A list of the k smallest values, sorted ascending.
     """
-    # TODO: Use heapq to find the k smallest values
-    pass
-
+    return heapq.nsmallest(k, values)
+    
 
 # ── Task 2: Tuple Priorities ────────────────────────────────────────
 
