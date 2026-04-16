@@ -158,24 +158,28 @@ def find_path(graph, start, goal):
     frontier = deque()
     parent = {}
 
-    # TODO: Add `start` to the frontier, mark it as visited.
-    #        The start node has no parent — you don't need to add it
-    #        to the parent map.
+    frontier.append(start)
+    visited.add(start)
 
     while frontier:
-        # TODO: Dequeue the next node
+        current = frontier.popleft()
 
-        # TODO: Check if `current` is the goal. If yes:
-        #        - Trace back through `parent` from goal to start
-        #        - Reverse the path and return it
-        #        (Hint: build a list by following parent[node] until
-        #         you reach start, then reverse)
+        if current == goal:
+            path = []
+            node = goal
+
+            while node in parent:
+                path.append(node)
+                node = parent[node]
+
+            path.append(start)
+            path.reverse()
+            return path
 
         for neighbor in graph.get_neighbors(current):
-            pass
-            # TODO: If the neighbor hasn't been visited:
-            #        - Mark it as visited
-            #        - Record its parent: parent[neighbor] = current
-            #        - Add it to the frontier
+            if neighbor not in visited:
+                visited.add(neighbor)
+                parent[neighbor] = current
+                frontier.append(neighbor)
 
-    return []  # No path found
+    return []
