@@ -48,7 +48,37 @@ def submit_with_retry(
     Return the response dictionary on success.
     """
     # TODO: Implement
-    pass
+
+    url = f"{base_url}/grade"
+
+    data = {
+
+        "student": student,
+
+        "lab": lab,
+
+        "slow": True
+
+    }
+
+    for attempt in range(max_retries):
+
+        try:
+
+            response = requests.post(url, json=data, timeout=timeout)
+
+            if response.status_code != 200:
+
+                raise RuntimeError(f"Request failed with status code {response.status_code}")
+
+            return response.json()
+
+        except requests.exceptions.Timeout:
+
+            if attempt == max_retries - 1:
+
+                raise RuntimeError("all retries failed")
+    
 
 
 def submit_idempotent(
