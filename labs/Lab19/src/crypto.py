@@ -73,7 +73,25 @@ def get_prices_batch(coin_ids: list, api_key: str) -> dict:
     # 2. Make ONE GET request with the joined string as "ids"
     # 3. Check status code
     # 4. Parse JSON and flatten into {coin_id: price} dict
-    pass
+
+    url = BASE_URL + "/simple/price"
+
+    ids_string = ",".join(coin_ids)
+
+    params = {"ids": ids_string, "vs_currencies": "usd", "x_cg_demo_api_key": api_key}
+
+    response = requests.get(url, params=params)
+    
+    if response.status_code != 200:
+        raise RuntimeError(f"API request failed with status code {response.status_code}")
+
+    data = response.json()
+
+    prices = {}
+    for coin_id in coin_ids:
+        prices[coin_id] = float(data[coin_id]["usd"])
+
+    return prices
 
 
 class CoinCache:
