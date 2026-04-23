@@ -177,11 +177,61 @@ class SmartClient:
         result = client.submit("alice", 19)
     """
 
-    def __init__(self, base_url: str = "http://localhost:8000", timeout: float = 2):
-        # TODO: Implement
-        pass
+    def __init__(self, base_url: str = "http://localhost:8000", timeout: float = 2, poll_interval: float = 0.5, max_polls: int = 20, ):
+
+        self.base_url = base_url
+
+        self.timeout = timeout
+
+        self.poll_interval = poll_interval
+
+        self.max_polls = max_polls
 
     def submit(self, student: str, lab: int) -> dict:
         """Submit a grading request. Tries sync first, falls back to async."""
         # TODO: Implement
-        pass
+
+        submission_id = f"{student}-lab{lab}"
+
+        try:
+
+            response = requests.post(
+
+                f"{self.base_url}/grade",
+
+                json={"student": student, "lab": lab, "submission_id": submission_id, "slow": True}, timeout=self.timeout)
+
+            if response.status_code == 200:
+
+                return response.json()
+
+            raise RuntimeError(f"Request failed with status code {response.status_code}")
+
+        except requests.exceptions.Timeout:
+
+            async_response = requests.post(
+
+                f"{self.base_url}/grade-async",
+
+                json={"student": student, "lab": lab, "submission_id": submission_id})
+
+            if async_response.status_code != 202:
+
+                raise RuntimeError(f"Request failed with status code {async_response.status_code}")
+
+            job_id = async_response.json()["job_id"]
+
+            for _ in range(self.max_polls):
+
+                poll_response = requests.get(f"{self.base_url}/grade-jobs/{job_id}")
+
+                poll_data = poll_response.json()
+
+                if poll_data["status"] == "complete":
+
+                    return poll_data["result"]
+
+                time.sleep(self.poll_interval)
+
+            raise RuntimeError("polling timed out")
+        
