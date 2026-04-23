@@ -94,7 +94,28 @@ def submit_idempotent(
     in the request body: f"{student}-lab{lab}"
     """
     # TODO: Implement
-    pass
+
+    url = f"{base_url}/grade"
+
+    submission_id = f"{student}-lab{lab}"
+
+    data = {"student": student, "lab": lab, "slow": True, "submission_id": submission_id}
+
+    for attempt in range(max_retries):
+
+        try:
+
+            response = requests.post(url, json=data, timeout=timeout)
+
+            if response.status_code != 200:
+
+                raise RuntimeError(f"Request failed with status code {response.status_code}")
+
+            return response.json()
+
+        except requests.exceptions.Timeout:
+            if attempt == max_retries - 1:
+                raise RuntimeError("all retries failed")
 
 
 def submit_async(
@@ -113,7 +134,48 @@ def submit_async(
     Raise RuntimeError("polling timed out") if max_polls is exceeded.
     """
     # TODO: Implement
-    pass
+
+    submission_id = f"{student}-lab{lab}"
+
+    response = requests.post(
+
+        f"{base_url}/grade-async",
+
+        json={
+
+            "student": student,
+
+            "lab": lab,
+
+            "submission_id": submission_id
+
+        }
+
+    )
+
+    if response.status_code != 202:
+
+        raise RuntimeError(f"Request failed with status code {response.status_code}")
+
+    job_id = response.json()["job_id"]
+
+    for _ in range(max_polls):
+
+        poll_response = requests.get(f"{base_url}/grade-jobs/{job_id}")
+
+        if poll_response.status_code != 200:
+
+            raise RuntimeError(f"Request failed with status code {poll_response.status_code}")
+
+        poll_data = poll_response.json()
+
+        if poll_data["status"] == "complete":
+
+            return poll_data["result"]
+
+        time.sleep(poll_interval)
+
+    raise RuntimeError("polling timed out")
 
 
 # ---------------------------------------------------------------------------

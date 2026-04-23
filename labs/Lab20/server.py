@@ -4,8 +4,10 @@ Your FastAPI grading server. Build each section as you work
 through the tasks. The TODOs tell you what to add and where.
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, BackgroundTasks
+from fastapi.responses import JSONResponse
 from grading import grade
+import uuid
 
 app = FastAPI()
 
@@ -21,6 +23,9 @@ app = FastAPI()
 # TODO: POST /grade endpoint
 
 grading_log = []
+completed = {}
+jobs = {}
+job_submission_map = {}
 
 @app.post("/grade")
 
@@ -30,16 +35,33 @@ def grade_endpoint(data: dict):
 
     lab = data["lab"]
 
-    slow = data.get("slow", False) 
+    slow = data.get("slow", False)
+
+    submission_id = data.get("submission_id")
+
+    if submission_id is not None and submission_id in completed:
+
+        return completed[submission_id]
 
     score = grade(student, lab, slow=slow)
 
-    record = {"student": student, "lab": lab, "score": score}
+    record = {
 
-    grading_log.append(record)  
+        "student": student,
+
+        "lab": lab,
+
+        "score": score
+
+    }
+
+    grading_log.append(record)
+
+    if submission_id is not None:
+
+        completed[submission_id] = record
 
     return record
-
 
 # ---------------------------------------------------------------------------
 # Task 2: Retries Reveal a Problem
@@ -84,6 +106,11 @@ def reset_log():
 
 # TODO: POST /reset-completed endpoint
 
+@app.post("/reset-completed")
+def reset_completed():
+    completed.clear()
+    return {"status": "cleared"}
+
 
 # ---------------------------------------------------------------------------
 # Task 4: Honest About Time
@@ -104,3 +131,58 @@ def reset_log():
 # TODO: run_grade_job helper function
 
 # TODO: GET /grade-jobs/{job_id} endpoint
+
+def run_grade_job(job_id, student, lab):
+
+    score = grade(student, lab, slow=True)
+
+    result = {"student": student, "lab": lab, "score": score}
+
+    grading_log.append(result)
+
+    jobs[job_id] = {"status": "complete", "result": result}
+
+
+app.post("/grade-async")
+
+def grade_async(data: dict, background_tasks: BackgroundTasks):
+
+    student = data["student"]
+
+    lab = data["lab"]
+
+    submission_id = data.get("submission_id")
+
+    if submission_id is not None and submission_id in job_submission_map:
+
+        job_id = job_submission_map[submission_id]
+
+        return JSONResponse({"job_id": job_id, "status": "accepted"}, status_code=202)
+
+    job_id = str(uuid.uuid4())
+
+    jobs[job_id] = {"status": "pending"}
+
+    if submission_id is not None:
+
+        job_submission_map[submission_id] = job_id
+
+    background_tasks.add_task(run_grade_job, job_id, student, lab)
+
+    return JSONResponse({"job_id": job_id, "status": "accepted"}, status_code=202)
+
+
+@app.get("/grade-jobs/{job_id}")
+def get_grade_job(job_id: str):
+
+    if job_id not in jobs:
+
+        return JSONResponse({"error": "job not found"}, status_code=404)
+
+    job = jobs[job_id]
+
+    if job["status"] == "pending":
+
+        return {"job_id": job_id, "status": "pending"}
+
+    return {"job_id": job_id, "status": "complete", "result": job["result"]}
