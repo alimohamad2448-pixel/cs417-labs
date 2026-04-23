@@ -111,7 +111,14 @@ class CoinCache:
         """
         # TODO: Task 3
         # Set up: ttl_seconds, _store (empty dict), hits (0), misses (0)
-        pass
+
+        self.ttl_seconds = ttl_seconds
+
+        self._store = {}
+
+        self.hits = 0
+
+        self.misses = 0
 
     def put(self, coin_id: str, price: float):
         """
@@ -123,7 +130,9 @@ class CoinCache:
         """
         # TODO: Task 3
         # Store {"price": price, "timestamp": time.time()} in _store
-        pass
+        
+
+        self._store[coin_id] = {"price": float(price), "timestamp": time.time()}
 
     def get(self, coin_id: str):
         """
@@ -137,7 +146,18 @@ class CoinCache:
         """
         # TODO: Task 3 — basic version (just check if key exists)
         # TODO: Task 4 — add TTL check (is the entry still fresh?)
-        pass
+
+        if coin_id in self._store:
+
+            self.hits += 1
+
+            return self._store[coin_id]["price"]
+
+        else:
+
+            self.misses += 1
+
+            return None
 
 
 def get_price_cached(coin_id: str, api_key: str, cache: CoinCache) -> float:
