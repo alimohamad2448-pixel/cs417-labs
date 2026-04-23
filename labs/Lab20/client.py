@@ -141,17 +141,7 @@ def submit_async(
 
         f"{base_url}/grade-async",
 
-        json={
-
-            "student": student,
-
-            "lab": lab,
-
-            "submission_id": submission_id
-
-        }
-
-    )
+        json={"student": student, "lab": lab, "submission_id": submission_id})
 
     if response.status_code != 202:
 
@@ -162,10 +152,6 @@ def submit_async(
     for _ in range(max_polls):
 
         poll_response = requests.get(f"{base_url}/grade-jobs/{job_id}")
-
-        if poll_response.status_code != 200:
-
-            raise RuntimeError(f"Request failed with status code {poll_response.status_code}")
 
         poll_data = poll_response.json()
 

@@ -143,7 +143,7 @@ def run_grade_job(job_id, student, lab):
     jobs[job_id] = {"status": "complete", "result": result}
 
 
-app.post("/grade-async")
+@app.post("/grade-async")
 
 def grade_async(data: dict, background_tasks: BackgroundTasks):
 
