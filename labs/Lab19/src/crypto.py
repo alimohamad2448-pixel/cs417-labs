@@ -25,13 +25,32 @@ def get_price(coin_id: str, api_key: str) -> float:
 
     Raises:
         RuntimeError: If the API response status code is not 200.
-    """
+    """ 
     # TODO: Task 1
     # 1. Make a GET request to BASE_URL + "/simple/price"
     #    with params: ids, vs_currencies, x_cg_demo_api_key
     # 2. Check status code — raise RuntimeError if not 200
     # 3. Parse JSON and return the USD price as a float
-    pass
+    
+
+    url = BASE_URL + "/simple/price"
+
+    params = { "ids": coin_id, "vs_currencies": "usd", "x_cg_demo_api_key": api_key}
+
+    response = requests.get(url, params=params)
+
+
+    if response.status_code != 200:
+        raise RuntimeError(f"API request failed with status code {response.status_code}")
+
+    data = response.json()
+
+    try:
+         return float(data[coin_id]["usd"])
+    except KeyError:
+        raise RuntimeError("Unexpected API response format")
+
+
 
 
 def get_prices_batch(coin_ids: list, api_key: str) -> dict:
