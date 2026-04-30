@@ -1,3 +1,6 @@
+from typing import TypedDict
+
+
 def greet(name: str) -> str:
     return f"Hello, {name}!"
 
@@ -16,3 +19,15 @@ def grade_lookup(roster: dict[str, int], name: str) -> int:
 
 def first_and_last(items: list[str]) -> tuple[str, str]:
     return items[0], items[-1]
+
+class StudentRow(TypedDict):
+    name: str
+    email: str
+    grade: str
+
+def read_roster(path: str) -> list[StudentRow]:
+    # pretend this reads a CSV
+    return [{"name": "Alice", "email": "alice@uni.edu", "grade": "92"}]
+
+roster = read_roster("roster.csv")
+print(roster[0]["namee"])   # typo!
