@@ -1,3 +1,4 @@
+1. 
 solution_a:
 This function takes a list of items in string form, and returns an ordered pair, as coded in the function itself. 
 Inside the function, the "Counter" function is used to count how many times an item may appear in. the given list.
@@ -16,8 +17,9 @@ It builds (item, count) pairs, sorts them by highest count (relying on Python’
 
 
 
+2. 
 B is the best overall because it is correct, readable, and its type hint matches the actual return value: list[tuple[str, int]]. 
-It uses Counter(items) to count frequencies, builds entries with each item’s first-appearance index, 
+It uses Counter(items) to count frequencies, builds entries with each item’s first-appearance, 
 then sorts by (-count, index), which directly handles both most-frequent-first and tie-breaking.
 
 A has a good heap-based idea because heapq.nlargest(k, indexed) can be more efficient than sorting everything when k is small. 
@@ -25,3 +27,16 @@ It also uses (count, -i, item) to rank higher counts first and break ties by ear
 
 C is the worst because it repeatedly calls items.count(item) for every unique item, which scans the input again and again. 
 That makes it much slower when there are many unique items, and increases it's complexity.
+
+
+3. 
+benchmark test gave error " mypy --strict src/solution_a.py src/solution_b.py src/solution_c.py
+src/solution_c.py:29: error: Incompatible return value type (got "list[tuple[str, int]]", expected "list[int]")  [return-value]
+Found 1 error in 1 file (checked 3 source files)" so I'm not sure how to do step 3 without fundementally changing the starter code
+
+4. 
+for scenario 1, my order wouldn't change, as running the function once a week with minimal input means we can focus on effeciency, which is why B is still the best option here
+
+for scenario 2, I would swap A and B, so A would be what i'd use here. Given that the scenario states there will be many unique items, having the heap centered function means there won't be an endless amount of sorting complexities that result if using function B. C would probably poop itself in scenario 2
+
+
