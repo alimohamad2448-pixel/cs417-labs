@@ -39,4 +39,14 @@ for scenario 1, my order wouldn't change, as running the function once a week wi
 
 for scenario 2, I would swap A and B, so A would be what i'd use here. Given that the scenario states there will be many unique items, having the heap centered function means there won't be an endless amount of sorting complexities that result if using function B. C would probably poop itself in scenario 2
 
+5. 
+I'd reject solution C. 
+After reviewing the program, I'll unfortunately have to reject it at this time.
+I want to point something out, as your code is very functional and works as intended, it just has an opitmization trip up.
+From lines 22-24, I see that the program calls item.count(item) for every unique item.
+The way the function is structured now with this method, it drastically increases processing time for large inputs, 
+and overall making it slighly unoptimized for any other input sizes. 
+A tweak to how the function deals with unique values, and how it decides to count the occurence for those values would definitely help with that. Other than that, the program does what it should.
+
+
 
